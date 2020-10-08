@@ -1,0 +1,80 @@
+---
+title: "Centroid Detection Service"
+author: "Brian Maitner"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Centroid Detection Service}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## About the Centroid Detection Service
+
+The Centroid Detection Service (CDS) is a tool for automated identification of potential geographic centroids in coordinate data.
+
+
+
+# Using the CDS
+
+The CDS takes in a dataframe of latitude and longitude points and spits out a bunch of stuff about whether they are likely to represent political division centroids.
+
+
+```{r }
+library(CDS)
+
+#First, we'll grab an example dataset containing two columns: latitude and longitude.
+coordinates <- read.csv("https://bien.nceas.ucsb.edu/bien/wp-content/uploads/2020/10/cds_testfile.csv", stringsAsFactors = FALSE)
+
+#Take a quick look at the input format
+head(coordinates)
+
+#Run the query
+CDS_output <- CDS(coordinates = coordinates)
+
+#Take a look at what is returned
+tail(CDS_output,10)
+
+
+```
+
+# Information returned by the CDS
+
+There are a lot of columns returned by the CDS, some of which you may not care about, some of which you (presumably) do.  This includes:
+
+ - Information on political divisions coordinates fall within.
+
+ - Information on both absolute and relative distance to centroids at 3 levels of political divisions.
+
+ - Opinions on whether a given coordinate is likely to be a centroid.
+ 
+ - Information on whether a coordinate is not valid.
+
+```{r}
+
+#Information on political divisions coordinates fall within
+tail(CDS_output[c("country","state","county")],n = 10)
+
+#Information on absolute and relative distances (analagous columns for state and county levels)
+tail(CDS_output[c("country_cent_dist","country_cent_dist_relative","country_cent_type","country_cent_dist_max","is_country_centroid")],10)
+
+#Are the points likely centroids?
+tail(CDS_output[c("is_country_centroid","is_state_centroid","is_county_centroid")],10)
+
+#Are there any probems with the coordinates?
+head(CDS_output["latlong_err"])
+
+```
+# CDS metadata
+For information on the current version of the CDS, use the function CDS_version.
+
+```{r}
+
+CDS_version()
+
+```

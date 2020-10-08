@@ -1,0 +1,25 @@
+Package: CDS
+Title: Detect Geographic Centroids
+Version: 0.0.0.9000
+Authors@R: 
+    c(
+            person("Brian", "Maitner", email = "bmaitner@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-2118-9880")),
+            person("Brad", "Boyle", email = "bboyle@email.arizona.edu", role = c("aut"))
+            )
+Description: What the package does (one paragraph).
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports: 
+        jsonlite,
+        RCurl,
+        rjson
+Suggests:
+        knitr,
+        rmarkdown,
+        testthat,
+        devtools,
+        BIEN
+VignetteBuilder: knitr
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
