@@ -4,10 +4,14 @@
 \alias{CDS}
 \title{Check for geographic centroids}
 \usage{
-CDS(coordinates)
+CDS(coordinates, maxdist = NULL, maxdistrel = NULL)
 }
 \arguments{
-\item{coordinates}{Data.frame containing two columns: latitude and longitude (in that order)}
+\item{coordinates}{Data.frame or matrix containing two columns: latitude and longitude (in that order).}
+
+\item{maxdist}{Maximum distance from centroid to qualify as centroid}
+
+\item{maxdistrel}{Maximum relative distance from centroid (relative to distance from centroid  to farthest point in political division), to qualify as a centroid}
 }
 \value{
 Data.frame containing CDS output.
