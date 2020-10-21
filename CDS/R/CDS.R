@@ -2,8 +2,9 @@
 #'
 #'Submits latitude/longitude coordinates to the centroid detection service
 #' @param coordinates Data.frame or matrix containing two columns: latitude and longitude (in that order).
-#' @param maxdist Maximum distance from centroid to qualify as centroid
-#' @param maxdistrel Maximum relative distance from centroid (relative to distance from centroid  to farthest point in political division), to qualify as a centroid
+#' @param maxdist NULL or Numeric. Maximum distance from centroid to qualify as centroid. If NULL, will use the current default.
+#' @param maxdistrel NULL or Numeric. Maximum relative distance from centroid (relative to distance from centroid  to farthest point in political division), to qualify as a centroid. If NULL, will use the current default.
+#' @param batches NULL or Integer. Number of batches to divide input into for parallel processing. If NULL, will use the current default.
 #' @return Data.frame containing CDS output.
 #' @import RCurl
 #' @importFrom jsonlite toJSON fromJSON
@@ -16,7 +17,7 @@
 #' CDS_output <- CDS(coordinates)
 #' }
 #'
-CDS <- function(coordinates,maxdist=NULL,maxdistrel=NULL){
+CDS <- function(coordinates,maxdist=NULL,maxdistrel=NULL, batches = NULL){
 
   # Set API options
     mode <- "resolve"										# Processing mode
@@ -31,8 +32,10 @@ CDS <- function(coordinates,maxdist=NULL,maxdistrel=NULL){
   # Convert the options to data frame and then JSON
     opts <- data.frame(c(mode))
     names(opts) <- c("mode")
-    if ( !is.null("maxdist") ){ opts$maxdist <- maxdist}
-    if ( !is.null("maxdistrel") ){ opts$maxdistrel <- maxdistrel}
+    if ( !is.null( maxdist ) ){ opts$maxdist <- maxdist}
+    if ( !is.null( maxdistrel ) ){ opts$maxdistrel <- maxdistrel}
+    if ( !is.null( batches ) ){ opts$batches <- batches}
+
     opts_json <-  jsonlite::toJSON(opts)
     opts_json <- gsub('\\[','',opts_json)
     opts_json <- gsub('\\]','',opts_json)
